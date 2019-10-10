@@ -161,7 +161,15 @@ def train_net(data, model, loss_func, optimizer, timesteps, batch_size, max_epoc
             #           (3) performing one optimizer step to update the parameters                  #
             # HINT: set the initial hidden state to zero.
             #########################################################################################
-            pass
+            N = data_batch.shape[0]
+            H = model.hidden_dim
+            h = model.forward(data_batch, np.linspace(-1.5, 0.5, num=(N * H)).reshape(N, H))
+
+            loss = loss_func.forward(h, labels_batch, mask)
+            dLoss = loss_func.backward()
+
+            _, _ = model.backward(dLoss)
+            optimizer.step()
             #########################################################################################
             #                                   END OF YOUR CODE                                    #
             #########################################################################################
